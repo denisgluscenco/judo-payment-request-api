@@ -72,10 +72,10 @@ const getPaymentMethods = (configuration) => {
 
     configuration.supportedMethods.forEach((method) => {
         switch (method) {
-            case "creditCard":
+            case "basic-card":
                 paymentMethods.push(getCreditCardMethod(configuration));
                 break;
-            case "applePay":
+            case "apple-pay":
                 paymentMethods.push(getApplePayMethod(configuration));
                 break;
             default:
