@@ -97,7 +97,7 @@ const getApplePayMethod = (configuration) => {
             version: 1,
             merchantIdentifier: configuration.applePayConfiguration.merchantIdentifier,
             merchantCapabilities: configuration.merchantCapabilities,
-            supportedNetworks: configuration.supportedMethods,
+            supportedNetworks: configuration.supportedNetworks,
             countryCode: configuration.countryCode,
         },
     }
