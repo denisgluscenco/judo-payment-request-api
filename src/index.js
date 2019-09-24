@@ -1,22 +1,4 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import { canMakeApplePayPayments, fetchApplePaySession } from './services/ApplePayHandler'
+import { handlePayment } from './services/PaymentRequestHandler'
 
-import styles from './styles.css'
-
-export default class ExampleComponent extends Component {
-  static propTypes = {
-    text: PropTypes.string
-  }
-
-  render() {
-    const {
-      text
-    } = this.props
-
-    return (
-      <div className={styles.test}>
-        Example Component: {text}
-      </div>
-    )
-  }
-}
+export { canMakeApplePayPayments, fetchApplePaySession, handlePayment };
