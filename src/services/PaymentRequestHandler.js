@@ -1,8 +1,4 @@
 
-//---------------------------------------------------------------------------------
-// Main method for handling payment on button click
-//---------------------------------------------------------------------------------
-
 export const handlePayment = (configuration, responseHandler) => {
 
     getPaymentRequest(configuration)
@@ -13,10 +9,6 @@ export const handlePayment = (configuration, responseHandler) => {
             alert(error)
         })
 }
-
-//---------------------------------------------------------------------------------
-// Returns a configured PaymentRequest object if available
-//---------------------------------------------------------------------------------
 
 const getPaymentRequest = (configuration) => {
 
@@ -42,10 +34,6 @@ const getPaymentRequest = (configuration) => {
     })
 }
 
-//---------------------------------------------------------------------------------
-// Handle PaymentRequest logic of showing payment sheet and processing the response
-//---------------------------------------------------------------------------------
-
 const handlePaymentRequest = (paymentRequest, configuration, responseHandler) => {
 
     paymentRequest.onmerchantvalidation = handleMerchantValidation(configuration);
@@ -61,10 +49,6 @@ const handlePaymentRequest = (paymentRequest, configuration, responseHandler) =>
             (exception.code === 20) ? console.log(exception.message) : alert(exception.message);
         })
 }
-
-//---------------------------------------------------------------------------------
-// Returns an array of configured payment methods from the types specified
-//---------------------------------------------------------------------------------
 
 const getPaymentMethods = (configuration) => {
 
@@ -86,10 +70,6 @@ const getPaymentMethods = (configuration) => {
     return paymentMethods
 }
 
-//---------------------------------------------------------------------------------
-// Returns a configured Apple Pay payment method
-//---------------------------------------------------------------------------------
-
 const getApplePayMethod = (configuration) => {
     return {
         supportedMethods: "https://apple.com/apple-pay",
@@ -103,10 +83,6 @@ const getApplePayMethod = (configuration) => {
     }
 }
 
-//---------------------------------------------------------------------------------
-// Returns a configured Credit Card payment method
-//---------------------------------------------------------------------------------
-
 const getCreditCardMethod = (configuration) => {
     return {
         supportedMethods: ['basic-card'],
@@ -116,11 +92,6 @@ const getCreditCardMethod = (configuration) => {
     }
 }
 
-//---------------------------------------------------------------------------------
-// Handler used for validating session, called once the ApplePay payment sheet is 
-// displayed
-//---------------------------------------------------------------------------------
-
 const handleMerchantValidation = (configuration) => {
     return (event) => {
         const sessionPromise = fetchApplePaySession(event.validationURL, configuration)
@@ -128,22 +99,38 @@ const handleMerchantValidation = (configuration) => {
     }
 }
 
-//---------------------------------------------------------------------------------
-// Handler called when the user changes the shipping method
-//---------------------------------------------------------------------------------
-
-const handleShippingOptionChanged = (configuration) => {
+const handleShippingAddressChanged = (configuration) => {
     return (event) => {
         event.updateWith(configuration.paymentDetails)
     }
 }
 
-//---------------------------------------------------------------------------------
-// Handler called when the user changes the shipping address
-//---------------------------------------------------------------------------------
-
-const handleShippingAddressChanged = (configuration) => {
+const handleShippingOptionChanged = (configuration) => {
     return (event) => {
-        event.updateWith(configuration.paymentDetails)
+        const paymentDetails = getUpdatedDetails(
+            configuration.paymentDetails,
+            event.target.shippingOption
+        )
+        event.updateWith(paymentDetails)
     }
+}
+
+const getUpdatedDetails = (paymentDetails, shippingType) => {
+
+    const shippingOption = paymentDetails.shippingOptions.filter(option => option.id === shippingType).shift()
+
+    if (paymentDetails.displayItems !== undefined) {
+
+        const prices = paymentDetails.displayItems.map(item => Number(item.amount.value));
+
+        const total = prices.reduce(function (previousValue, currentValue) {
+            return previousValue + currentValue;
+        });
+
+        paymentDetails.total.amount.value = String(Number(total) + Number(shippingOption.amount.value))
+    } else {
+        paymentDetails.total.amount.value = shippingOption.amount.value
+    }
+
+    return paymentDetails;
 }

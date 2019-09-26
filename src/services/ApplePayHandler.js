@@ -1,8 +1,4 @@
 
-//---------------------------------------------------------------------------------
-// Returns true if Apple Pay is enabled
-//---------------------------------------------------------------------------------
-
 export const canMakeApplePayPayments = () => {
     return new Promise((resolve, reject) => {
 
@@ -16,10 +12,6 @@ export const canMakeApplePayPayments = () => {
         }
     })
 }
-
-//---------------------------------------------------------------------------------
-// Returns an ApplePaySession from the validation URL
-//---------------------------------------------------------------------------------
 
 export const fetchApplePaySession = (validationURL, configuration) => {
 
