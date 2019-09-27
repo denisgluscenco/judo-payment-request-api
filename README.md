@@ -17,7 +17,6 @@ This is a private package containing the `Payment Request API` implementation us
 ```jsx
 import { 
   canMakeApplePayPayments, 
-  fetchApplePaySession,
   handlePayment 
   } from 'judo-payment-request-api'
 ```
