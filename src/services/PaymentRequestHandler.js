@@ -118,6 +118,7 @@ const handleShippingOptionChanged = (configuration) => {
 const getUpdatedDetails = (paymentDetails, shippingType) => {
 
     const shippingOption = paymentDetails.shippingOptions.filter(option => option.id === shippingType).shift()
+    shippingOption.selected = true
 
     if (paymentDetails.displayItems !== undefined) {
 
