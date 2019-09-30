@@ -1,7 +1,7 @@
 
-export const handlePayment = (configuration, responseHandler) => {
+export const handlePayment = (type, configuration, responseHandler) => {
 
-    getPaymentRequest(configuration)
+    getPaymentRequest(type, configuration)
         .then((request) => {
             handlePaymentRequest(request, configuration, responseHandler)
         })
@@ -10,13 +10,13 @@ export const handlePayment = (configuration, responseHandler) => {
         })
 }
 
-const getPaymentRequest = (configuration) => {
+const getPaymentRequest = (type, configuration) => {
 
     return new Promise((resolve, reject) => {
 
         if (window.PaymentRequest) {
 
-            const methods = getPaymentMethods(configuration);
+            const methods = getPaymentMethods(type, configuration);
             const details = configuration.paymentDetails;
             const options = configuration.paymentOptions;
 
@@ -50,22 +50,13 @@ const handlePaymentRequest = (paymentRequest, configuration, responseHandler) =>
         })
 }
 
-const getPaymentMethods = (configuration) => {
+const getPaymentMethods = (type, configuration) => {
 
     const paymentMethods = []
 
-    configuration.supportedMethods.forEach((method) => {
-        switch (method) {
-            case "basic-card":
-                paymentMethods.push(getCreditCardMethod(configuration));
-                break;
-            case "apple-pay":
-                paymentMethods.push(getApplePayMethod(configuration));
-                break;
-            default:
-                break;
-        }
-    })
+    if (type === 'applePay') {
+        paymentMethods.push(getApplePayMethod(configuration));
+    }
 
     return paymentMethods
 }
@@ -80,15 +71,6 @@ const getApplePayMethod = (configuration) => {
             supportedNetworks: configuration.supportedNetworks,
             countryCode: configuration.countryCode,
         },
-    }
-}
-
-const getCreditCardMethod = (configuration) => {
-    return {
-        supportedMethods: ['basic-card'],
-        data: {
-            supportedNetworks: configuration.supportedNetworks
-        }
     }
 }
 
