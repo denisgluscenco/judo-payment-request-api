@@ -42,11 +42,38 @@ const handlePaymentRequest = (paymentRequest, configuration, responseHandler) =>
 
     paymentRequest.show()
         .then(response => {
-            responseHandler(response);
+
+            const billingDetails = {
+                name = response.payerName,
+                email = response.payerEmail,
+                phone = response.payerPhone
+            }
+
+            const shippingDetails = {
+                addressLine: response.shippingAddress.addressLine,
+                country: response.shippingAddress.country,
+                city: response.shippingAddress.city,
+                dependentLocality: response.shippingAddress.dependentLocality,
+                organization: response.shippingAddress.organization,
+                phone: response.shippingAddress.phone,
+                postalCode: response.shippingAddress.postalCode,
+                recipient: response.shippingAddress.recipient,
+                region: response.shippingAddress.region,
+                regionCode: response.shippingAddress.regionCode,
+                sortingCode: response.shippingAddress.sortingCode
+            }
+
+            const paymentResponse = {
+                paymentDetails: response.details,
+                billingDetails: billingDetails,
+                shippingDetails: shippingDetails
+            }
+
+            responseHandler(paymentResponse, null);
             return response.complete();
         })
-        .catch(exception => {
-            (exception.code === 20) ? console.log(exception.message) : alert(exception.message);
+        .catch(error => {
+            responseHandler(null, error);
         })
 }
 
