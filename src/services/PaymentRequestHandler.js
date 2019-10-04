@@ -44,9 +44,9 @@ const handlePaymentRequest = (paymentRequest, configuration, responseHandler) =>
         .then(response => {
 
             const billingDetails = {
-                name = response.payerName,
-                email = response.payerEmail,
-                phone = response.payerPhone
+                name: response.payerName,
+                email: response.payerEmail,
+                phone: response.payerPhone
             }
 
             const shippingDetails = {
