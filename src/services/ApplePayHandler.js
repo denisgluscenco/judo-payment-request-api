@@ -1,8 +1,4 @@
 
-//------------------------------------------------------------------
-// MARK: METHOD FOR CHECKING IF APPLE PAY IS AVAILABLE
-//------------------------------------------------------------------
-
 export const canMakeApplePayPayments = () => {
     return new Promise((resolve, reject) => {
 
@@ -16,10 +12,6 @@ export const canMakeApplePayPayments = () => {
         }
     })
 }
-
-//------------------------------------------------------------------
-// MARK: MAKES A REQUEST TO THE APPLE SERVERS FOR PAYMENT VALIDATION
-//------------------------------------------------------------------
 
 export const fetchApplePaySession = (validationURL, configuration) => {
 
